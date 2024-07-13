@@ -42,24 +42,39 @@ while message != "0":
     
 filepath = input("Enter full filepath: ")
 # filepath = "/Users/syedmuhammadbinasif/Desktop/tree.png/"
-filepath = "/Users/syedmuhammadbinasif/Desktop/swaggy.jpg"
+# filepath = "/Users/syedmuhammadbinasif/Desktop/swaggy.jpg"
 
+
+if filepath != "":
+    first_msg_attached_flag = True
+    first_msg_attached = input("Do you want the first message to be sent as the caption of the file? (Y/N): ")
+    if first_msg_attached == "N":
+        first_msg_attached_flag = False
 
 for num in numbers_list:
     driver.get(f"https://web.whatsapp.com/send?phone={num}")
-    sleep(12)
+    sleep(7)
 
     if filepath != "":
-        attachment_box = driver.find_element(By.XPATH, '//div[@title = "Attach"]')
-        attachment_box.click()
+        # attachment_box = driver.find_element(By.XPATH, '//div[@title = "Attach"]')
+        # attachment_box.click()
+        driver.find_element(By.CSS_SELECTOR, "span[data-icon='attach-menu-plus']").click()
 
-        sleep(1)
+        sleep(2)
 
-        image_box = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/div[4]/div/footer/div[1]/div/span[2]/div/div[1]/div[2]/div/span/div/ul/div/div[2]/li/div')
-        image_box.click()
-        sleep(10)
         try:
-            image_box.send_keys(os.path.abspath(filepath))
+
+            driver.find_element(By.CSS_SELECTOR, "input[accept='image/*']").send_keys(filepath)
+            sleep(2)
+
+            if first_msg_attached_flag:
+                msg_box = driver.find_element(By.XPATH, '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[1]')
+                msg_box.send_keys(messages[0])
+                msg_box.send_keys(Keys.ENTER)
+            
+            send_button = driver.find_element(By.CSS_SELECTOR, "span[data-icon='send']")
+            send_button.click()
+
         except:
             print("filepath does not exist!")
 
@@ -68,7 +83,15 @@ for num in numbers_list:
     # find the message box
     msg_box = driver.find_element(By.XPATH, '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[1]')
 
+    
+
     # send each message and ENTER
+    if first_msg_attached_flag:
+        try:
+            messages = messages[1:]
+        except:
+            messages = []
+
     for msg in messages:
         msg_box.send_keys(msg)
         msg_box.send_keys(Keys.ENTER)
