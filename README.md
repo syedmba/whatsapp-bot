@@ -1,6 +1,9 @@
 # WhatsApp Messaging Bot
 This bot is designed for you to be able to send your holiday well-wishes to all your friends and family without having to use broadcast lists.
 
+### Version Info
+v1.0 Current image upload is in the form of a sticker.
+
 ### Methodology
 The bot uses an exported contact list in csv format with contact names and numbers listed.
 
